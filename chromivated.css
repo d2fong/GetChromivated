@@ -11,7 +11,12 @@
   margin: auto;
 }
 
+.hidden {
+	visibility: hidden;
+}
+
 #title {
 	color: #8F8F8F;
 	text-shadow: #ffffff 1px 1px 1px;
+	text-align: center;
 }

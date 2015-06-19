@@ -1,10 +1,6 @@
 'use strict';
 
-
-
 var getMotivatedPics = function() {
-  var img = document.getElementById('get-chromivated');
-
   var url = "http://www.reddit.com/r/GetMotivated/.json"
   var req = new XMLHttpRequest;
   req.open("GET", url, true);
@@ -14,23 +10,23 @@ var getMotivatedPics = function() {
     var submissions = jsonResp['data']['children'].sort(function(a,b) {
       return parseFloat(a['ups']) > parseFloat(b['ups']);
     });
-    var random_img_not_found = true;
-    while (random_img_not_found) {
-        var submission = submissions[Math.floor(Math.random()*submissions.length)]['data'];
-        var url = submission['url'];
-        if (submission['link_flair_css_class'] == 'image') {
-          var img_extension = url.substr(url.length - 4, url.length-1);
-          console.log(url);
-          console.log(img_extension);
-          if (img_extension == '.png' ||  img_extension == '.jpg') {
-            img.src = url;
-          } else {
-            url += '.png';
-            img.src = url;
-          }
-          random_img_not_found = false;
 
-        }
+    var random_img_not_found = true,
+        img = document.getElementById('get-chromivated'),
+        default_img = document.getElementById('default'),
+        num_tries = 0;
+
+    while(random_img_not_found && num_tries < 20) {
+
+      var submission = submissions[Math.floor(Math.random()*submissions.length)]['data'];
+      if ((submission['title'].slice(0,7)) == '[Image]') {
+        img.src = submission['preview']['images'][0]['source']['url'];
+        random_img_not_found = false;
+      } 
+      num_tries++;
+    }
+    if (num_tries >= 20) {
+      default_img.className = "center fit";
     }
   }
 
